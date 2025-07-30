@@ -242,7 +242,6 @@ async def shutdown_event():
 
 def main():
     """Main function for direct execution."""
-    import uvicorn
     
     # Setup basic logging if not already configured
     if not logger.handlers:
