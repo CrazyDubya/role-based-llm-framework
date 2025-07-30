@@ -130,7 +130,6 @@ def log_error(message: str) -> None:
         error.text = message
         
         # Add timestamp
-        import datetime
         timestamp = ET.SubElement(error, "Timestamp")
         timestamp.text = datetime.datetime.now().isoformat()
         
