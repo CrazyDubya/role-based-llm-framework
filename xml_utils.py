@@ -1,5 +1,6 @@
 import xml.etree.ElementTree as ET
 import os
+import datetime
 from typing import Optional
 from pathlib import Path
 
@@ -44,14 +45,19 @@ def update_task_status(task_id: str, status: str) -> None:
     xml_file_path = get_xml_file_path()
     
     try:
-        task = _get_task_element(task_id)
+        if not os.path.exists(xml_file_path):
+            create_xml_schema()
+        
+        tree = ET.parse(xml_file_path)
+        root = tree.getroot()
+        task = root.find(f".//Task[TaskID='{task_id}']")
+        
         if task is not None:
             status_elem = task.find("Status")
             if status_elem is None:
                 status_elem = ET.SubElement(task, "Status")
             status_elem.text = status
             
-            tree = ET.ElementTree(task.getroottree().getroot())
             tree.write(xml_file_path, encoding='utf-8', xml_declaration=True)
             print(f"Task {task_id} status updated to {status}.")
         else:
@@ -84,11 +90,16 @@ def log_success(task_id: str) -> None:
     xml_file_path = get_xml_file_path()
     
     try:
-        task = _get_task_element(task_id)
+        if not os.path.exists(xml_file_path):
+            create_xml_schema()
+        
+        tree = ET.parse(xml_file_path)
+        root = tree.getroot()
+        task = root.find(f".//Task[TaskID='{task_id}']")
+        
         if task is not None:
             log = ET.SubElement(task, "Log")
             log.text = "Success"
-            tree = ET.ElementTree(task.getroottree().getroot())
             tree.write(xml_file_path, encoding='utf-8', xml_declaration=True)
             print(f"Success logged for task {task_id}.")
         else:
@@ -101,11 +112,16 @@ def log_failure(task_id: str, errors: str) -> None:
     xml_file_path = get_xml_file_path()
     
     try:
-        task = _get_task_element(task_id)
+        if not os.path.exists(xml_file_path):
+            create_xml_schema()
+        
+        tree = ET.parse(xml_file_path)
+        root = tree.getroot()
+        task = root.find(f".//Task[TaskID='{task_id}']")
+        
         if task is not None:
             log = ET.SubElement(task, "Log")
             log.text = f"Failure: {errors}"
-            tree = ET.ElementTree(task.getroottree().getroot())
             tree.write(xml_file_path, encoding='utf-8', xml_declaration=True)
             print(f"Failure logged for task {task_id} with errors: {errors}.")
         else:
