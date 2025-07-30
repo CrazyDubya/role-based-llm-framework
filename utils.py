@@ -33,7 +33,6 @@ def load_configuration() -> Dict[str, Any]:
 
 def substitute_env_variables(content: str) -> str:
     """Replace ${VAR} and ${VAR:-default} patterns with environment variables."""
-    import re
     
     def replace_var(match):
         var_expr = match.group(1)
