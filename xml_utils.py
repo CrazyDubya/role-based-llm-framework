@@ -155,7 +155,6 @@ def store_results(summary: str) -> None:
         result.text = summary
         
         # Add timestamp
-        import datetime
         timestamp = ET.SubElement(result, "Timestamp")
         timestamp.text = datetime.datetime.now().isoformat()
         
