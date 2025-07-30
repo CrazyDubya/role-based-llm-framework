@@ -234,12 +234,13 @@ async def startup_event():
             setup_notifications()
         except Exception as e:
             logger.warning(f"Could not initialize UI components: {e}")
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    """Application shutdown event."""
+    
+    yield  # Yield control to the application
+    
+    # Shutdown logic
     logger.info("Shutting down ChipCliff Role-Based LLM Framework")
 
+app = FastAPI(lifespan=lifespan)
 def main():
     """Main function for direct execution."""
     
